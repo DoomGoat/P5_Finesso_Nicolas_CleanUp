@@ -8,11 +8,11 @@ import com.openclassroom.cleanup.model.Project;
 
 import java.util.List;
 
-public class ProjectDataRepository {
+public class ProjectRepository {
 
     private final ProjectDao projectDao;
 
-    public ProjectDataRepository(ProjectDao projectDao) { this.projectDao = projectDao; }
+    public ProjectRepository(ProjectDao projectDao) { this.projectDao = projectDao; }
 
     // --- GET PROJECT ---
     public LiveData<List<Project>> getAllProjects() { return this.projectDao.getAllProjects(); }

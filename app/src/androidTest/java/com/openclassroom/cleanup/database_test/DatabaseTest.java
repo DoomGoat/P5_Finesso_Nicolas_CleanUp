@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.openclassroom.cleanup.database.CleanUpDatabase;
 import com.openclassroom.cleanup.model.Project;
 import com.openclassroom.cleanup.model.Task;
+import com.openclassroom.cleanup.viewmodel.MainViewModel;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 
 
 @RunWith(AndroidJUnit4.class)
-public class TaskDaoTest {
+public class DatabaseTest {
 
     // FOR DATA
     private CleanUpDatabase database;
@@ -44,9 +45,7 @@ public class TaskDaoTest {
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
         database = Room.inMemoryDatabaseBuilder(context, CleanUpDatabase.class)
-                .addCallback(CleanUpDatabase.prepopulateWithProjects())
-                .addCallback(CleanUpDatabase.prepopulateWithTasks())
-                .allowMainThreadQueries()
+                .addCallback(CleanUpDatabase.prepopulate())
                 .build();
     }
 
@@ -74,11 +73,12 @@ public class TaskDaoTest {
         // TEST
         List<Task> tasks = LiveDataTestUtil.getValue(this.database.taskDao().getAllTasks());
         assertEquals(5, tasks.size());
+        assertEquals("To delete", tasks.get(4).getName());
     }
 
     @Test
     public void createAndDeleteTaskFromDb() throws InterruptedException {
-        // BEFORE : Adding demo item. Next, get the item added & delete it.
+        // BEFORE : Adding demo task. Next, get the task added & delete it.
         this.database.taskDao().createTask(NEW_TASK);
         Task taskAdded = LiveDataTestUtil.getValue(this.database.taskDao().getAllTasks()).get(4);
         this.database.taskDao().deleteTask(taskAdded.getId());

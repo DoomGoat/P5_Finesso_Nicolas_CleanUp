@@ -32,11 +32,9 @@ public abstract class CleanUpDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             CleanUpDatabase.class, "MyDatabase.db")
-                            .addCallback(prepopulateWithProjects())
-                            .addCallback(prepopulateWithTasks())
-                            .allowMainThreadQueries()
+                            .fallbackToDestructiveMigration()
+                            .addCallback(prepopulate())
                             .build();
-                            //.fallbackToDestructiveMigration()
                 }
             }
         }
@@ -44,43 +42,48 @@ public abstract class CleanUpDatabase extends RoomDatabase {
     }
 
     // PREPOPULATE
-    public static Callback prepopulateWithProjects(){
+    public static Callback prepopulate(){
         return new Callback() {
+
+            @Override
+            public void onDestructiveMigration(@NonNull SupportSQLiteDatabase db) {
+                super.onDestructiveMigration(db);
+                prepopulateWithProjects(db);
+                prepopulateWithTasks(db);
+            }
 
             @Override
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                 super.onCreate(db);
-
-                for (Project project  : Project.getPrepopulateProject()) {
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put("id", project.getId());
-                    contentValues.put("name", project.getName());
-                    contentValues.put("color", project.getColor());
-                    db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
-                }
-
+                prepopulateWithProjects(db);
+                prepopulateWithTasks(db);
             }
         };
     }
 
-    public static Callback prepopulateWithTasks(){
-        return new Callback() {
+    private static void prepopulateWithProjects(SupportSQLiteDatabase db){
+        for (Project project  : Project.getProjectsToPrepopulate()) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("id", project.getId());
+            contentValues.put("name", project.getName());
+            contentValues.put("color", project.getColor());
+            db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
+        }
 
-            @Override
-            public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                super.onCreate(db);
-
-                for (Task task  : Task.getPrepopulateTask()) {
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put("id", task.getId());
-                    contentValues.put("projectId", task.getProjectId());
-                    contentValues.put("name", task.getName());
-                    contentValues.put("creationTimestamp", task.getCreationTimestamp());
-                    db.insert("Task", OnConflictStrategy.IGNORE, contentValues);
-                }
-
-            }
-        };
     }
+
+    private static void prepopulateWithTasks(SupportSQLiteDatabase db){
+        for (Task task  : Task.getTasksToPrepopulate()) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("id", task.getId());
+            contentValues.put("projectId", task.getProjectId());
+            contentValues.put("name", task.getName());
+            contentValues.put("creationTimestamp", task.getCreationTimestamp());
+            db.insert("Task", OnConflictStrategy.IGNORE, contentValues);
+        }
+
+    }
+
+
 
 }

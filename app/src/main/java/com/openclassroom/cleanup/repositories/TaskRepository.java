@@ -8,11 +8,11 @@ import com.openclassroom.cleanup.model.Task;
 
 import java.util.List;
 
-public class TaskDataRepository {
+public class TaskRepository {
 
     private final TaskDao taskDao;
 
-    public TaskDataRepository(TaskDao taskDao) { this.taskDao = taskDao; }
+    public TaskRepository(TaskDao taskDao) { this.taskDao = taskDao; }
 
     // --- GET ---
     public LiveData<List<Task>> getAllTasks(){ return this.taskDao.getAllTasks(); }

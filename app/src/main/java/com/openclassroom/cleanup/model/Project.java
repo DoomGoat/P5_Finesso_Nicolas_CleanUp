@@ -43,7 +43,7 @@ public class Project {
         this.color = color;
     }
 
-    public static Project[] getPrepopulateProject() {
+    public static Project[] getProjectsToPrepopulate() {
         return new Project[]{
                 new Project(1, "Projet Tartampion", 0xFFEADAD1),
                 new Project(2, "Projet Lucidia", 0xFFB4CDBA),

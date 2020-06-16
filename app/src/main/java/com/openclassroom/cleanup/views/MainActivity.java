@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Liste
     private TextView lblNoTasks;
 
     // FOR DATA
-    private MainViewModel taskViewModel;
+    private MainViewModel mainViewModel;
     private TaskAdapter adapter;
 
     private List<Task> tasksList = new ArrayList<>();
@@ -93,25 +93,25 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Liste
 
     private void configureViewModel(){
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(this);
-        this.taskViewModel = ViewModelProviders.of(this, mViewModelFactory).get(MainViewModel.class);
+        this.mainViewModel = ViewModelProviders.of(this, mViewModelFactory).get(MainViewModel.class);
     }
 
     // ---
 
     private void getProjects(){
-        this.taskViewModel.getAllProjects().observe(this, this::updateProjectsList);
+        this.mainViewModel.getAllProjects().observe(this, this::updateProjectsList);
     }
 
     private void getTasks(){
-        this.taskViewModel.getAllTasks().observe(this, this::updateTasksList);
+        this.mainViewModel.getAllTasks().observe(this, this::updateTasksList);
     }
 
     private void addTask(@NonNull Task task) {
-        this.taskViewModel.createTask(task);
+        this.mainViewModel.createTask(task);
     }
 
     private void deleteTask(long taskId) {
-        this.taskViewModel.deleteTask(taskId);
+        this.mainViewModel.deleteTask(taskId);
     }
 
     private void updateTasks() {
