@@ -1,4 +1,4 @@
-package com.openclassroom.cleanup.ui;
+package com.openclassroom.cleanup.views;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -21,12 +21,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassroom.cleanup.R;
-import com.openclassroom.cleanup.injection.Injection;
-import com.openclassroom.cleanup.injection.ViewModelFactory;
+import com.openclassroom.cleanup.viewmodel.Injection;
+import com.openclassroom.cleanup.viewmodel.MainViewModel;
+import com.openclassroom.cleanup.viewmodel.ViewModelFactory;
 import com.openclassroom.cleanup.model.Project;
 import com.openclassroom.cleanup.model.Task;
-import com.openclassroom.cleanup.views.TaskAdapter;
-import com.openclassroom.cleanup.views.TaskViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,12 +33,6 @@ import java.util.Date;
 import java.util.List;
 
 
-/**
- * <p>Home activity of the application which is displayed when the user opens the app.</p>
- * <p>Displays the list of tasks.</p>
- *
- * @author Gaëtan HERFRAY
- */
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.Listener {
 
@@ -54,13 +47,13 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Liste
     private TextView lblNoTasks;
 
     // FOR DATA
-    private TaskViewModel taskViewModel;
+    private MainViewModel taskViewModel;
     private TaskAdapter adapter;
 
     private List<Task> tasksList = new ArrayList<>();
     private List<Project> projectsList = new ArrayList<>();
 
-    private SortMethod sortMethod = SortMethod.NONE;
+    private SortMethod sortMethod = SortMethod.OLD_FIRST;
 
 
     @Override
@@ -77,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Liste
 
         this.getTasks();
         this.getProjects();
-        this.updateTasks();
 
 
 
@@ -101,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Liste
 
     private void configureViewModel(){
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(this);
-        this.taskViewModel = ViewModelProviders.of(this, mViewModelFactory).get(TaskViewModel.class);
+        this.taskViewModel = ViewModelProviders.of(this, mViewModelFactory).get(MainViewModel.class);
     }
 
     // ---
@@ -176,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Liste
         } else if (id == R.id.filter_recent_first) {
             sortMethod = SortMethod.RECENT_FIRST;
         }
+        updateTasks();
         return super.onOptionsItemSelected(item);
     }
 
@@ -277,10 +270,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.Liste
 
     private void updateTasksList(List<Task> tasks){
         tasksList = tasks;
+        updateTasks();
     }
 
     private void updateProjectsList(List<Project> projects){
         projectsList = projects;
+        updateTasks();
     }
 
 

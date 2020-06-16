@@ -1,4 +1,4 @@
-package com.openclassroom.cleanup.injection;
+package com.openclassroom.cleanup.viewmodel;
 
 import android.content.Context;
 
@@ -11,17 +11,17 @@ import java.util.concurrent.Executors;
 
 public class Injection {
 
-    public static TaskDataRepository provideTaskDataSource(Context context) {
+    private static TaskDataRepository provideTaskDataSource(Context context) {
         CleanUpDatabase database = CleanUpDatabase.getInstance(context);
         return new TaskDataRepository(database.taskDao());
     }
 
-    public static ProjectDataRepository provideProjectDataSource(Context context) {
+    private static ProjectDataRepository provideProjectDataSource(Context context) {
         CleanUpDatabase database = CleanUpDatabase.getInstance(context);
         return new ProjectDataRepository(database.projectDao());
     }
 
-    public static Executor provideExecutor(){ return Executors.newSingleThreadExecutor(); }
+    private static Executor provideExecutor(){ return Executors.newSingleThreadExecutor(); }
 
     public static ViewModelFactory provideViewModelFactory(Context context) {
         TaskDataRepository dataSourceTask = provideTaskDataSource(context);

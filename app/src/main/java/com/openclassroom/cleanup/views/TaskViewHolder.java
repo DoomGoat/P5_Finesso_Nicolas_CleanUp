@@ -35,12 +35,6 @@ public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         lblProjectName = taskView.findViewById(R.id.lbl_project_name);
         imgDelete = taskView.findViewById(R.id.img_delete);
 
-//        imgDelete.setOnClickListener(view -> {
-//            final Object tag = view.getTag();
-//            if (tag instanceof Task) {
-//                TaskAdapter.deleteTaskListener.onDeleteTask((Task) tag);
-//            }
-//        });
     }
 
     /**

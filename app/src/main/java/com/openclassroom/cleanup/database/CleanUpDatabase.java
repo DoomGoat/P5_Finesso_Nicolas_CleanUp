@@ -32,9 +32,11 @@ public abstract class CleanUpDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             CleanUpDatabase.class, "MyDatabase.db")
-                            .addCallback(prepopulateDatabase())
+                            .addCallback(prepopulateWithProjects())
+                            .addCallback(prepopulateWithTasks())
                             .allowMainThreadQueries()
                             .build();
+                            //.fallbackToDestructiveMigration()
                 }
             }
         }
@@ -42,19 +44,39 @@ public abstract class CleanUpDatabase extends RoomDatabase {
     }
 
     // PREPOPULATE
-    private static Callback prepopulateDatabase(){
+    public static Callback prepopulateWithProjects(){
         return new Callback() {
 
             @Override
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                 super.onCreate(db);
 
-                for (Project project  : Project.getAllDummyProjects()) {
+                for (Project project  : Project.getPrepopulateProject()) {
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("id", project.getId());
                     contentValues.put("name", project.getName());
                     contentValues.put("color", project.getColor());
                     db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
+                }
+
+            }
+        };
+    }
+
+    public static Callback prepopulateWithTasks(){
+        return new Callback() {
+
+            @Override
+            public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                super.onCreate(db);
+
+                for (Task task  : Task.getPrepopulateTask()) {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("id", task.getId());
+                    contentValues.put("projectId", task.getProjectId());
+                    contentValues.put("name", task.getName());
+                    contentValues.put("creationTimestamp", task.getCreationTimestamp());
+                    db.insert("Task", OnConflictStrategy.IGNORE, contentValues);
                 }
 
             }

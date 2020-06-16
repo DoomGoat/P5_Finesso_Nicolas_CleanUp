@@ -16,15 +16,11 @@ public class TaskDataRepository {
 
     // --- GET ---
     public LiveData<List<Task>> getAllTasks(){ return this.taskDao.getAllTasks(); }
-    public LiveData<List<Task>> getTaskFromProjectId(long projectId){ return this.taskDao.getTaskFromProjectId(projectId); }
 
     // --- CREATE ---
     public void createTask(Task task){ taskDao.createTask(task); }
 
     // --- DELETE ---
     public void deleteTask(long taskId){ taskDao.deleteTask(taskId); }
-
-    // --- UPDATE ---
-    // public void updateTask(Task task){ taskDao.updateTask(task); }
 
 }

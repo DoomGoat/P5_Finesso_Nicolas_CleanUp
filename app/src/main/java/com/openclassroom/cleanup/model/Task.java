@@ -6,17 +6,16 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
-/**
- * <p>Model for the tasks of the application.</p>
- *
- * @author Gaëtan HERFRAY
- */
+
+
 @Entity(foreignKeys = @ForeignKey(entity = Project.class,
         parentColumns = "id",
         childColumns = "projectId"))
 public class Task {
+
     /**
      * The unique identifier of the task
      */
@@ -53,82 +52,54 @@ public class Task {
         this.setCreationTimestamp(creationTimestamp);
     }
 
-    /**
-     * Returns the unique identifier of the task.
-     *
-     * @return the unique identifier of the task
-     */
     public long getId() {
         return id;
     }
 
-    /**
-     * Sets the unique identifier of the task.
-     *
-     * @param id the unique identifier of the task to set
-     */
     private void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * Sets the unique identifier of the project associated to the task.
-     *
-     * @param projectId the unique identifier of the project associated to the task to set
-     */
+
     private void setProjectId(long projectId) {
         this.projectId = projectId;
     }
 
-    /**
-     * Returns the unique identifier of the project associated to the task.
-     *
-     * @return project the unique identifier of the project associated to the task to get
-     */
     public long getProjectId() {
         return projectId;
     }
-
 
     public Project getProject(List<Project> projects) {
         return Project.getProjectById(getProjectId(), projects);
     }
 
-    /**
-     * Returns the name of the task.
-     *
-     * @return the name of the task
-     */
+
     @NonNull
     public String getName() {
         return name;
     }
 
-    /**
-     * Sets the name of the task.
-     *
-     * @param name the name of the task to set
-     */
     private void setName(@NonNull String name) {
         this.name = name;
     }
 
-    /**
-     * Sets the timestamp when the task has been created.
-     *
-     * @param creationTimestamp the timestamp when the task has been created to set
-     */
+
     private void setCreationTimestamp(long creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
     }
 
-    /**
-     * Returns the timestamp when the task has been created.
-     *
-     * @return creationTimestamp the timestamp when the task has been created to get
-     */
     public long getCreationTimestamp() {
         return creationTimestamp;
+    }
+
+
+    public static Task[] getPrepopulateTask() {
+        return new Task[]{
+        new Task(1, 1, "task 1", new Date().getTime()),
+        new Task(2, 2, "task 2", new Date().getTime()),
+        new Task(3, 3, "task 3", new Date().getTime()),
+        new Task(4, 4, "task 4", new Date().getTime())
+        };
     }
 
     /**

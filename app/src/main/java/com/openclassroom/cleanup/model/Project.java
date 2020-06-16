@@ -9,11 +9,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.List;
 
-/**
- * <p>Models for project in which tasks are included.</p>
- *
- * @author Gaëtan HERFRAY
- */
+
 @Entity
 public class Project {
     /**
@@ -47,11 +43,11 @@ public class Project {
         this.color = color;
     }
 
-    public static Project[] getAllDummyProjects() {
+    public static Project[] getPrepopulateProject() {
         return new Project[]{
-                new Project(1L, "Projet Tartampion", 0xFFEADAD1),
-                new Project(2L, "Projet Lucidia", 0xFFB4CDBA),
-                new Project(3L, "Projet Circus", 0xFFA3CED2),
+                new Project(1, "Projet Tartampion", 0xFFEADAD1),
+                new Project(2, "Projet Lucidia", 0xFFB4CDBA),
+                new Project(3, "Projet Circus", 0xFFA3CED2),
         };
     }
 

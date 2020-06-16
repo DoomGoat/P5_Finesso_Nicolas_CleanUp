@@ -1,4 +1,4 @@
-package com.openclassroom.cleanup.views;
+package com.openclassroom.cleanup.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -10,7 +10,7 @@ import com.openclassroom.cleanup.repositories.TaskDataRepository;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-public class TaskViewModel extends ViewModel {
+public class MainViewModel extends ViewModel {
 
     // REPOSITORIES
     private final TaskDataRepository taskDataSource;
@@ -18,12 +18,11 @@ public class TaskViewModel extends ViewModel {
     private final Executor executor;
 
     // FOR DATA
-    public TaskViewModel(TaskDataRepository taskDataSource, ProjectDataRepository projectDataSource, Executor executor) {
+    MainViewModel(TaskDataRepository taskDataSource, ProjectDataRepository projectDataSource, Executor executor) {
         this.taskDataSource = taskDataSource;
         this.projectDataSource = projectDataSource;
         this.executor = executor;
     }
-
 
     // -------------
     // FOR PROJECT
